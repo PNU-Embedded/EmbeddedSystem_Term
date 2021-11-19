@@ -1,32 +1,32 @@
-#ifndef __INIT_H
-#define __INIT_H
+#ifndef __COMMAND_HANDLER_H
+#define __COMMAND_HANDLER_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 #include "stm32f10x.h"
-#include "core_cm3.h"
-#include "misc.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_adc.h"
-#include "lcd.h"
-#include "touch.h"
-
 /* Exported types ------------------------------------------------------------*/
+typedef enum {
+ CMD_CLEAR, CMD_DELETE, CMD_ENTER, CMD_NUMBER
+} Command_Types;
+
+typedef struct{
+ char command_buffer[101];
+ uint8_t command_buffer_index;
+ Command_Types command;
+} Command_Handler;
+
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void RCC_Configure(void);
-void GPIO_Configure(void);
-void NVIC_Configure(void);
-void LCD_Configure(void);
-void USART2_Init(void);
+void Command_Append(Command_Handler* command_handler, char ch);
+void Command_Decide(Command_Handler* command_handler);
 
 #ifdef __cplusplus
 }

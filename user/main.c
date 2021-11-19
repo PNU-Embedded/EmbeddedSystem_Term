@@ -1,36 +1,69 @@
 #include <ctype.h>
-#include "stm32f10x.h"
-#include "core_cm3.h"
-#include "misc.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_adc.h"
-#include "lcd.h"
-#include "touch.h"
 #include "init.h"
+#include "command_handler.h"
 
-uint8_t password[4] = {'0', '0', '0', '0'};
-uint8_t current = 0;
+
+// function prototype
+void USART2_IRQHandler(void);
+void Bluetooth_SendData(uint16_t word);
+void Command_Run(Command_Handler* command_handler);
+//////////////////////////////////////////////////////////////////////////////////////
+
+Command_Handler command_handler;
 
 void USART2_IRQHandler(void) {
-  uint8_t word;
+  uint16_t word;
   if(USART_GetITStatus(USART2,USART_IT_RXNE)!=RESET) {
     USART_ClearITPendingBit(USART2,USART_IT_RXNE); 
     word = USART_ReceiveData(USART2);
-    if (word == '\n' || word == '\r')
+    if (word == '\n')
       return;
-
-    USART_SendData(USART2, isalpha(word) == 0 ? '0' : '1');
+    if (word == '\r') {
+      Command_Decide(&command_handler);
+      Command_Run(&command_handler);
+      return;
+    }
+    Command_Append(&command_handler, word);
   }
 }
 
-void Debugger_Init(void) {
-  LCD_Init();
-  Touch_Configuration();
-  //Touch_Adjust();
-  LCD_Clear(WHITE);
+void Bluetooth_SendString(char* str) {
+  while(*str) {
+    USART_SendData(USART2, *str);
+    ++str;
+  }
+}
+
+void Command_Run(Command_Handler* command_handler) {
+  switch(command_handler->command) {
+  case CMD_NUMBER:
+    Bluetooth_SendString(command_handler->command_buffer);
+    break;
+    
+  case CMD_CLEAR:
+    
+    
+    
+    break;
+    
+  case CMD_DELETE:
+    
+    
+    
+    break;
+    
+  case CMD_ENTER:
+    
+    
+    
+    break;
+    
+  default:
+    
+    
+    
+    break;
+  }
 }
 
 void Dubugger_ShowData(uint32_t data) {
@@ -42,9 +75,8 @@ int main(void) {
   RCC_Configure();
   GPIO_Configure();
   NVIC_Configure();
+  LCD_Configure();
   USART2_Init();
-  
-  Debugger_Init();
         
   while (1) {
     

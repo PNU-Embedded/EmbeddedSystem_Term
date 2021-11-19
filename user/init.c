@@ -41,6 +41,13 @@ void NVIC_Configure(void) {
   NVIC_Init(&NVIC_InitStructure);
 }
 
+void LCD_Configure(void) {
+  LCD_Init();
+  Touch_Configuration();
+  //Touch_Adjust();
+  LCD_Clear(WHITE);
+}
+
 void USART2_Init(void) {
   USART_InitTypeDef USART2_InitStructure;
 
