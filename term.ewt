@@ -3048,7 +3048,13 @@
                 <name>$PROJ_DIR$\user\inc\command_handler.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\user\inc\common.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\user\inc\init.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\user\inc\password_handler.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\user\inc\stm32f10x_conf.h</name>
@@ -3061,10 +3067,16 @@
             <name>$PROJ_DIR$\user\command_handler.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\user\common.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\user\init.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\password_handler.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\stm32f10x_it.c</name>
