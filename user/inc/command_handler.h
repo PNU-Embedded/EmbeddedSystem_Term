@@ -6,10 +6,8 @@
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include <string.h>
-#include <ctype.h>
-#include <stdbool.h>
 #include "stm32f10x.h"
+#include "init.h"
 /* Exported types ------------------------------------------------------------*/
 typedef enum {
  CMD_CLEAR, CMD_DELETE, CMD_ENTER, CMD_NUMBER
@@ -25,8 +23,9 @@ typedef struct{
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void Command_Append(Command_Handler* command_handler, char ch);
-void Command_Decide(Command_Handler* command_handler);
+void Command_Append(Command_Handler*, char ch);
+void Command_Decide(Command_Handler*);
+void Command_Reset(Command_Handler*);
 
 #ifdef __cplusplus
 }
