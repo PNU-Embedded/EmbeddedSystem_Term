@@ -10,7 +10,6 @@ bool isNum(char* str) {
 }
 
 void Bluetooth_SendString(char* str) {
-  printf("%s\n", str);
   USART_SendData(USART2, (uint16_t)255);
   sleep(100000);
   while(*str != '\0') {

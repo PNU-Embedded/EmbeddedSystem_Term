@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <stdio.h>
+#include "lcd16.h" 
 #include "init.h"
 #include "common.h"
 #include "command_handler.h"
@@ -10,9 +11,11 @@ void USART2_IRQHandler(void);
 void Command_Run(void);
 //////////////////////////////////////////////////////////////////////////////////////
 
+// variables
 Program_Status program_current_status = STATE_INIT;
 Command_Handler command_handler;
 Password_Handler password_handler;
+//////////////////////////////////////////////////////////////////////////////////////
 
 void USART2_IRQHandler(void) {
   uint16_t word;
@@ -22,7 +25,6 @@ void USART2_IRQHandler(void) {
     
     // 금고 열린 상태면 명령 무시
     if (program_current_status == STATE_OPEN) {
-      printf("OPEN STATUS!!\n");
       return;
     }
     
@@ -44,12 +46,14 @@ void Command_Run(void) {
     case CMD_NUMBER: {
       Password_Type(&password_handler, command_handler.command_buffer[0]);
       Bluetooth_SendString(password_handler.current_buffer);
+      LCD16_ShowPassword(password_handler.current_buffer);
       break;
     }
     
     case CMD_DELETE: {
       Password_Delete(&password_handler);
       Bluetooth_SendString(password_handler.current_buffer);
+      LCD16_ShowPassword(password_handler.current_buffer);
       break;
     }
   
@@ -57,22 +61,29 @@ void Command_Run(void) {
       switch(program_current_status) {
         case STATE_INIT: {
           bool update_result = Password_Update(&password_handler);
-          if (update_result == false)
+          //  short password
+          if (update_result == false) {
+            LCD16_ShowMessage("Short Password!");
             return;
+          }
 
           Bluetooth_SendString(password_handler.current_buffer);
+          LCD16_ShowPassword(password_handler.current_buffer);
           program_current_status = STATE_CLOSE;
-          printf("Initiated!\n");
+          LCD16_ShowMessage("Password Setted!");
           break;
         }
         case STATE_CLOSE: {
           bool enter_result = Password_Enter(&password_handler);
-          if (enter_result == false)
+          if (enter_result == false) {
+            LCD16_ShowMessage("Wrong Password!");
             return;
+          }
           
           Bluetooth_SendString(password_handler.current_buffer);
+          LCD16_ShowPassword(password_handler.current_buffer);
           program_current_status = STATE_OPEN;
-          printf("opened!\n");
+          LCD16_ShowMessage("OPEN!");
           break;
         }
       }
@@ -81,17 +92,15 @@ void Command_Run(void) {
   }
 }
 
-void Dubugger_ShowData(uint32_t data) {
-  LCD_ShowNum(20, 40, data, 8, BLACK, WHITE);
-}
-
 int main(void) {
   SystemInit();
   RCC_Configure();
   GPIO_Configure();
   NVIC_Configure();
-  //LCD_Configure();
+  LCD16_Configure();
   USART2_Init();
+  
+  
   
   while (1) {
   }
