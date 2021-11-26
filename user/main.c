@@ -1,6 +1,6 @@
-#include <ctype.h>
 #include <stdio.h>
 #include "lcd16.h" 
+#include "magnetic.h"
 #include "init.h"
 #include "common.h"
 #include "command_handler.h"
@@ -97,11 +97,12 @@ int main(void) {
   RCC_Configure();
   GPIO_Configure();
   NVIC_Configure();
-  LCD16_Configure();
   USART2_Init();
-  
-  
+  LCD16_Configure();
+  MAGNETIC_Configure();
   
   while (1) {
+    printf("%d\n", MAGNETIC_Get_Status());
+    sleep(1000);
   }
 }
