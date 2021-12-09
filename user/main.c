@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "lcd16.h" 
 #include "magnetic.h"
+#include "nfc.h"
 #include "init.h"
 #include "common.h"
 #include "command_handler.h"
@@ -17,6 +18,7 @@ Command_Handler command_handler;
 Password_Handler password_handler;
 //////////////////////////////////////////////////////////////////////////////////////
 
+/*
 void USART2_IRQHandler(void) {
   uint16_t word;
   if(USART_GetITStatus(USART2,USART_IT_RXNE)!=RESET) {
@@ -40,7 +42,7 @@ void USART2_IRQHandler(void) {
     }
   }
 }
-
+*/
 void Command_Run(void) {
   switch(command_handler.command) {
     case CMD_NUMBER: {
@@ -91,18 +93,23 @@ void Command_Run(void) {
     }
   }
 }
+          
+        extern int cnt;
+extern uint16_t word;
 
 int main(void) {
   SystemInit();
   RCC_Configure();
   GPIO_Configure();
   NVIC_Configure();
-  USART2_Init();
-  LCD16_Configure();
-  MAGNETIC_Configure();
+  //USART2_Init();
+  //LCD16_Configure();
+  //MAGNETIC_Configure();
+  NFC_Configure();
   
   while (1) {
-    printf("%d\n", MAGNETIC_Get_Status());
+    //printf("%d\n", MAGNETIC_Get_Status());
+    printf("received: %d\n", NFC_getFirmwareVersion());
     sleep(1000);
   }
 }

@@ -3060,6 +3060,9 @@
                 <name>$PROJ_DIR$\user\inc\magnetic.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\user\inc\nfc.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\user\inc\password_handler.h</name>
             </file>
             <file>
@@ -3086,6 +3089,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\user\main.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\nfc.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\password_handler.c</name>
