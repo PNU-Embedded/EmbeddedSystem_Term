@@ -1,7 +1,7 @@
 #include "lcd16.h"
 
 /*
-  LCD16
+  LCD16 PIN:
   C6
   D13, D16
   E0~E16

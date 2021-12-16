@@ -9,9 +9,9 @@
 
 #define ACCELERATOR_GPIO GPIOA
 #define ACCELERATOR_GPIO_X_PIN GPIO_Pin_0
-#define ACCELERATOR_GPIO_Z_PIN GPIO_Pin_2
+#define ACCELERATOR_GPIO_Z_PIN GPIO_Pin_1
 #define ACCELERATOR_ADC_X_CH ADC_Channel_0
-#define ACCELERATOR_ADC_Z_CH ADC_Channel_2
+#define ACCELERATOR_ADC_Z_CH ADC_Channel_1
 
 static void Accelerator_RCCInit(void);
 static void Accelerator_GPIOInit(void);

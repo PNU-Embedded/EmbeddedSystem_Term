@@ -3051,6 +3051,9 @@
                 <name>$PROJ_DIR$\user\inc\bluetooth.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\user\inc\buzzer.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\user\inc\command_handler.h</name>
             </file>
             <file>
@@ -3077,6 +3080,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\user\bluetooth.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\buzzer.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\command_handler.c</name>
