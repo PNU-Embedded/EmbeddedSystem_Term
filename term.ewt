@@ -3045,13 +3045,16 @@
         <group>
             <name>inc</name>
             <file>
+                <name>$PROJ_DIR$\user\inc\accelerator.h</name>
+            </file>
+            <file>
+                <name>$PROJ_DIR$\user\inc\bluetooth.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\user\inc\command_handler.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\user\inc\common.h</name>
-            </file>
-            <file>
-                <name>$PROJ_DIR$\user\inc\init.h</name>
             </file>
             <file>
                 <name>$PROJ_DIR$\user\inc\lcd16.h</name>
@@ -3070,13 +3073,16 @@
             </file>
         </group>
         <file>
+            <name>$PROJ_DIR$\user\accelerator.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\bluetooth.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\user\command_handler.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\common.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\user\init.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\lcd16.c</name>

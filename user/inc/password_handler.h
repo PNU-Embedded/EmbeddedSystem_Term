@@ -6,9 +6,9 @@
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
-#include "stm32f10x.h"
-#include "init.h"
+   
+#include "common.h"
+   
 /* Exported types ------------------------------------------------------------*/
 
 typedef struct {

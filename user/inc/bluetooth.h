@@ -1,30 +1,20 @@
-#ifndef __INIT_H
-#define __INIT_H
+#ifndef __BLUETOOTH_H
+#define __BLUETOOTH_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
-#include "core_cm3.h"
-#include "misc.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_adc.h"
-#include "touch.h"
+   
+#include "common.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void RCC_Configure(void);
-void GPIO_Configure(void);
-void NVIC_Configure(void);
-void USART2_Init(void);
+void Bluetooth_Configure(void);
 
 #ifdef __cplusplus
 }

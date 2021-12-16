@@ -1,5 +1,12 @@
 #include "lcd16.h"
 
+/*
+  LCD16
+  C6
+  D13, D16
+  E0~E16
+*/
+
 static void LCD16_Sleep(int time){
   for (int i = 0; i < time; ++i);
 }

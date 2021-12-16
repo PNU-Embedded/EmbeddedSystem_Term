@@ -6,9 +6,8 @@
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_gpio.h"
-#include <stdbool.h>
+   
+#include "common.h"
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum {
@@ -18,7 +17,7 @@ typedef enum {
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void MAGNETIC_Configure(void);
+void Magnetic_Configure(void);
 Magnetic_Status MAGNETIC_Get_Status(void);
 
 #ifdef __cplusplus

@@ -1,20 +1,23 @@
 #include <stdio.h>
+#include "common.h"
+#include "bluetooth.h"
 #include "lcd16.h" 
 #include "magnetic.h"
-#include "init.h"
-#include "common.h"
+#include "accelerator.h"
 #include "command_handler.h"
 #include "password_handler.h"
 
-// function prototype
+/* function prototype */
 void USART2_IRQHandler(void);
 void Command_Run(void);
 //////////////////////////////////////////////////////////////////////////////////////
 
-// variables
+/* variables - hANDLE */
 Program_Status program_current_status = STATE_INIT;
+
 Command_Handler command_handler;
 Password_Handler password_handler;
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 void USART2_IRQHandler(void) {
@@ -94,15 +97,13 @@ void Command_Run(void) {
 
 int main(void) {
   SystemInit();
-  RCC_Configure();
-  GPIO_Configure();
-  NVIC_Configure();
-  USART2_Init();
+  Bluetooth_Configure();
   LCD16_Configure();
-  MAGNETIC_Configure();
+  Magnetic_Configure();
+  Accelerator_Configure();
   
   while (1) {
-    printf("%d\n", MAGNETIC_Get_Status());
-    sleep(1000);
+    //printf("%d\n", MAGNETIC_Get_Status());
+    printf("%d : %d\n", Accelerator_Get_X(), Accelerator_Get_Z());
   }
 }
