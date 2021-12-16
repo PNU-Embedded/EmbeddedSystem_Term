@@ -2318,6 +2318,9 @@
                 <name>$PROJ_DIR$\user\inc\password_handler.h</name>
             </file>
             <file>
+                <name>$PROJ_DIR$\user\inc\servo.h</name>
+            </file>
+            <file>
                 <name>$PROJ_DIR$\user\inc\stm32f10x_conf.h</name>
             </file>
             <file>
@@ -2347,6 +2350,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\user\password_handler.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\user\servo.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\user\stm32f10x_it.c</name>

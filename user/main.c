@@ -4,6 +4,7 @@
 #include "lcd16.h" 
 #include "magnetic.h"
 #include "accelerator.h"
+#include "servo.h"
 #include "command_handler.h"
 #include "password_handler.h"
 
@@ -101,9 +102,14 @@ int main(void) {
   LCD16_Configure();
   Magnetic_Configure();
   Accelerator_Configure();
+  Servo_Configure();
   
   while (1) {
     //printf("%d\n", MAGNETIC_Get_Status());
-    printf("%d : %d\n", Accelerator_Get_X(), Accelerator_Get_Z());
+    //printf("%d : %d\n", Accelerator_Get_X(), Accelerator_Get_Z());
+    Servo_Open();
+    sleep(10000000);
+    Servo_Close();
+    sleep(10000000);
   }
 }
