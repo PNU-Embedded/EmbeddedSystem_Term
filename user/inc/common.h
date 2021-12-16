@@ -1,35 +1,44 @@
-#ifndef __COMMAND_HANDLER_H
-#define __COMMAND_HANDLER_H
+#ifndef __COMMON_H
+#define __COMMON_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "common.h"
-/* Exported types ------------------------------------------------------------*/
-typedef enum {
- CMD_CLEAR, CMD_DELETE, CMD_ENTER, CMD_NUMBER
-} Command_Types;
+   
+#include "misc.h"
+#include "core_cm3.h"
+#include "stm32f10x.h"
+#include "stm32f10x_exti.h"
+#include "stm32f10x_gpio.h"
+#include "stm32f10x_usart.h"
+#include "stm32f10x_rcc.h"
+#include "stm32f10x_adc.h"
+#include "stm32f10x_dma.h"
+#include "stm32f10x_tim.h"
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
-typedef struct{
- char command_buffer[101];
- uint8_t command_buffer_index;
- Command_Types command;
-} Command_Handler;
+/* Exported types ------------------------------------------------------------*/
+   
+typedef enum {
+ STATE_INIT, STATE_CLOSE, STATE_OPEN
+} Program_Status;
 
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void Command_Append(Command_Handler*, char ch);
-void Command_Decide(Command_Handler*);
-void Command_Reset(Command_Handler*);
+bool isNum(char* str);
+void Bluetooth_SendString(char*);
+void sleep(int);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32F10x_IT_H */
+#endif
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

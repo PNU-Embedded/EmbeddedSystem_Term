@@ -1,32 +1,32 @@
-#ifndef __INIT_H
-#define __INIT_H
+#ifndef __PASSWORD_HANDLER_H
+#define __PASSWORD_HANDLER_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x.h"
-#include "core_cm3.h"
-#include "misc.h"
-#include "stm32f10x_exti.h"
-#include "stm32f10x_gpio.h"
-#include "stm32f10x_usart.h"
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_adc.h"
-#include "lcd.h"
-#include "touch.h"
-
+   
+#include "common.h"
+   
 /* Exported types ------------------------------------------------------------*/
+
+typedef struct {
+ char password[5];
+ char current_buffer[5];
+ uint8_t current_buffer_index;
+ uint8_t wrong_cnt;
+} Password_Handler;
+
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void RCC_Configure(void);
-void GPIO_Configure(void);
-void NVIC_Configure(void);
-void LCD_Configure(void);
-void USART2_Init(void);
+bool Password_Update(Password_Handler*);
+void Password_Type(Password_Handler*, char);
+bool Password_Enter(Password_Handler*);
+void Password_Delete(Password_Handler*);
+void Password_Reset(Password_Handler*);
 
 #ifdef __cplusplus
 }

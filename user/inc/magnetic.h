@@ -1,35 +1,29 @@
-#ifndef __COMMAND_HANDLER_H
-#define __COMMAND_HANDLER_H
+#ifndef __MAGNETIC_H
+#define __MAGNETIC_H
 
 #ifdef __cplusplus
  extern "C" {
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
+   
 #include "common.h"
+
 /* Exported types ------------------------------------------------------------*/
 typedef enum {
- CMD_CLEAR, CMD_DELETE, CMD_ENTER, CMD_NUMBER
-} Command_Types;
-
-typedef struct{
- char command_buffer[101];
- uint8_t command_buffer_index;
- Command_Types command;
-} Command_Handler;
-
+ MAGNETIC_CLOSED = 0, MAGNETIC_OPENED = 1
+} Magnetic_Status;
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
-void Command_Append(Command_Handler*, char ch);
-void Command_Decide(Command_Handler*);
-void Command_Reset(Command_Handler*);
+void Magnetic_Configure(void);
+Magnetic_Status MAGNETIC_Get_Status(void);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32F10x_IT_H */
+#endif
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
