@@ -11,14 +11,14 @@
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum {
- MAGNETIC_CLOSED = 0, MAGNETIC_OPENED = 1
+ MAGNETIC_OPENED = 0, MAGNETIC_CLOSED = 1
 } Magnetic_Status;
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 
 void Magnetic_Configure(void);
-Magnetic_Status MAGNETIC_Get_Status(void);
+Magnetic_Status Magnetic_Get_Status(void);
 
 #ifdef __cplusplus
 }

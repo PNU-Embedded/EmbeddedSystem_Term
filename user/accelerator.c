@@ -106,9 +106,9 @@ void Accelerator_Configure(void) {
 }
 
 uint16_t Accelerator_Get_X(void) {
-  return accelerator_x;
+  return accelerator_x / 10;
 }
 
 uint16_t Accelerator_Get_Z(void) {
-  return ADC_GetConversionValue(ADC2);
+  return ADC_GetConversionValue(ADC2) / 10;
 }

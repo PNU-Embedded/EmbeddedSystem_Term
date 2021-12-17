@@ -65,3 +65,32 @@ void Bluetooth_Configure(void) {
   Bluetooth_NVICInit();
   Bluetooth_USARTInit();
 }
+
+void Bluetooth_SendPassword(char* pw, bool set) {
+  USART_SendData(USART2, (uint16_t)255);
+  sleep(200000);
+  while(*pw != '\0') {
+    USART_SendData(USART2, *pw);
+    sleep(200000);
+    ++pw;
+  }
+  USART_SendData(USART2, set ? 2 : 0);
+  sleep(200000);
+}
+
+void Bluetooth_SendError(char* str) {
+  USART_SendData(USART2, (uint16_t)250);
+  sleep(200000);
+  while(*str != '\0') {
+    USART_SendData(USART2, *str);
+    sleep(200000);
+    ++str;
+  }
+  USART_SendData(USART2, 1);
+  sleep(200000);
+}
+
+void Bluetooth_SendData(char ch) {
+  USART_SendData(USART2, ch);
+  sleep(200000);
+}

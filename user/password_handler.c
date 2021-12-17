@@ -39,4 +39,9 @@ void Password_Delete(Password_Handler* password_handler) {
   }
 }
 
-void Password_Reset(Password_Handler*);
+void Password_Reset(Password_Handler* password_handler) {
+  password_handler->current_buffer[0] = '\0';
+  password_handler->current_buffer_index = 0;
+  for (int i = 0; i < 4; ++i) 
+    password_handler->password[i] = 0;
+}

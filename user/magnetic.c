@@ -13,6 +13,6 @@ void Magnetic_Configure(void){
   GPIO_Init(MAGNETIC_GPIO, &GPIO_InitStructure);
 }
 
-Magnetic_Status MAGNETIC_Get_Status(void) {
-  return GPIO_ReadInputDataBit(MAGNETIC_GPIO, MAGNETIC_GPIO_PIN) == 0 ? MAGNETIC_CLOSED : MAGNETIC_OPENED;
+Magnetic_Status Magnetic_Get_Status(void) {
+  return GPIO_ReadInputDataBit(MAGNETIC_GPIO, MAGNETIC_GPIO_PIN) == 0 ? MAGNETIC_OPENED : MAGNETIC_CLOSED;
 }

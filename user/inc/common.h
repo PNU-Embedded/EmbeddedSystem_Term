@@ -24,7 +24,7 @@
 /* Exported types ------------------------------------------------------------*/
    
 typedef enum {
- STATE_INIT, STATE_CLOSE, STATE_OPEN
+ STATE_INIT = 254, STATE_CLOSE = 253, STATE_OPEN = 252
 } Program_Status;
 
 /* Exported constants --------------------------------------------------------*/
@@ -32,7 +32,6 @@ typedef enum {
 /* Exported functions ------------------------------------------------------- */
 
 bool isNum(char* str);
-void Bluetooth_SendString(char*);
 void sleep(int);
 
 #ifdef __cplusplus

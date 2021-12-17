@@ -15,6 +15,9 @@
 /* Exported functions ------------------------------------------------------- */
 
 void Bluetooth_Configure(void);
+void Bluetooth_SendPassword(char*, bool);
+void Bluetooth_SendError(char*);
+void Bluetooth_SendData(char);
 
 #ifdef __cplusplus
 }
