@@ -9,12 +9,14 @@
 #include "command_handler.h"
 #include "password_handler.h"
 
+#define COMMAND_START 255
+#define COMMAND_END 0
+
 /* function prototype */
 void USART2_IRQHandler(void);
 void Command_Run(void);
 //////////////////////////////////////////////////////////////////////////////////////
 
-/* variables - hANDLE */
 Program_Status program_current_status = STATE_INIT;
 
 Command_Handler command_handler;
@@ -33,10 +35,10 @@ void USART2_IRQHandler(void) {
       return;
     }
     
-    if (word == 255) {
+    if (word == COMMAND_START) {
       Command_Reset(&command_handler);
     }
-    else if (word == 0){
+    else if (word == COMMAND_END){
       Command_Decide(&command_handler);
       Command_Run();
     }
@@ -107,7 +109,7 @@ int main(void) {
   Servo_Configure();
   
   while (1) {
-    //printf("%d\n", MAGNETIC_Get_Status());
+    printf("%d\n", MAGNETIC_Get_Status());
     //printf("%d : %d\n", Accelerator_Get_X(), Accelerator_Get_Z());
     /* Buzzer_Off();
     sleep(10000000);
