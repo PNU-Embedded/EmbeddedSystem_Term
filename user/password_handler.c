@@ -44,4 +44,14 @@ void Password_Reset(Password_Handler* password_handler) {
   password_handler->current_buffer_index = 0;
   for (int i = 0; i < 4; ++i) 
     password_handler->password[i] = 0;
+  password_handler->wrong_cnt = 0;
+}
+
+void Password_Increase_Wrong_Cnt(Password_Handler* password_handler) {
+  if (password_handler->wrong_cnt <= 2)
+    password_handler->wrong_cnt++;
+}
+
+void Password_Clear_Wrong_Cnt(Password_Handler* password_handler) {
+  password_handler-> wrong_cnt = 0;
 }

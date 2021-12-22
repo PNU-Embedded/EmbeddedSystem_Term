@@ -13,18 +13,20 @@
 #define COMMAND_END 0
 
 #define COMMAND_CLOSE 253
-#define COMMAND_ALERT 251
+#define COMMAND_ALERT_THEFT 251
+#define COMMAND_ALERT_WRONG 247
 
 #define COMMAND_REQUEST 249
-#define COMMAND_START_PW 248
-#define COMMAND_END_PW 2
-
+#define COMMAND_RESET 248
 /* function prototype */
 void USART2_IRQHandler(void);
 void Command_Run(void);
+void chnageStateToInit(void);
 void changeStateToClose(void); 
 void changeStateToOpen(void);
 void closeSafe(void);
+void resetAll(void);
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 Program_Status program_current_status = STATE_INIT;
@@ -34,9 +36,8 @@ Password_Handler password_handler;
 
 bool buzzer_timer_en_status = false;
 bool buzzer_status = false;
-int buzzer_cnt = 0;
-//////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////////
 void changeStateToClose() {
   Bluetooth_SendData(STATE_CLOSE); // CLOSE 상태로 전환 전송
   LCD16_ShowMessage("STATE: CLOSED"); // 상태 메시지 출력
@@ -65,12 +66,36 @@ void openSafe() {
   Servo_Open();
 }
 
+void resetAll() {
+  if (program_current_status == STATE_CLOSE) {
+    Command_Reset(&command_handler);
+    Password_Reset(&password_handler);
+    program_current_status = STATE_INIT;
+    buzzer_timer_en_status = false;
+    buzzer_status = false;
+    Buzzer_Off();
+    Bluetooth_SendData(248); // 비밀번호 reset command
+    Bluetooth_SendData(254); // INIT STATE command
+    
+    LCD16_ShowMessage("STATE: INIT");
+    LCD16_ShowPassword(password_handler.current_buffer);
+  } else {
+    Bluetooth_SendError("Please close the door before reset");
+  }
+}
+
 /* bluetooth 명령 제어 */
 void USART2_IRQHandler(void) {
   uint16_t word;
   if(USART_GetITStatus(USART2,USART_IT_RXNE)!=RESET) {
     USART_ClearITPendingBit(USART2,USART_IT_RXNE); 
     word = USART_ReceiveData(USART2);
+    
+    /* 리셋 명령어 */
+    if (word == COMMAND_RESET) {
+      resetAll();
+      return;
+    }
     
     /* 금고 시작 상태 */
     if (program_current_status == STATE_INIT ) {
@@ -106,9 +131,6 @@ void USART2_IRQHandler(void) {
       else if (word == COMMAND_CLOSE) {
         Bluetooth_SendError("Already Closed");
       }
-      else if (word == COMMAND_ALERT) {
-        buzzer_timer_en_status = false;
-      } 
       else if (word == COMMAND_REQUEST) {
         Bluetooth_SendData(program_current_status);
       }
@@ -154,7 +176,6 @@ void Command_Run(void) {
         /* 패스워드가 짧은 경우 */
         if (update_result == false) {
           Bluetooth_SendError("Wrong Password");
-          LCD16_ShowMessage("Short Password!");
           return;
         }
         /* 패스워드 세팅이 정상적으로 된 경우 */
@@ -173,8 +194,17 @@ void Command_Run(void) {
         bool enter_result = Password_Enter(&password_handler);
         /* 패스워드가 틀린 경우 */
         if (enter_result == false) {
-          Bluetooth_SendError("Wrong Password");
-          LCD16_ShowMessage("Wrong Password!");
+          Password_Increase_Wrong_Cnt(&password_handler);
+          char err_msg[20] = "Wrong Cnt: ";
+          int err_len = strlen(err_msg);
+          err_msg[err_len] = '0' + password_handler.wrong_cnt;
+          err_msg[err_len + 1] = '\0';
+          Bluetooth_SendError("Wrong Password!");
+          LCD16_ShowMessage(err_msg);
+          if (password_handler.wrong_cnt == 3) {
+            Bluetooth_SendData(COMMAND_ALERT_WRONG);
+            buzzer_timer_en_status = true;
+          }
           return;
         }
         
@@ -182,6 +212,9 @@ void Command_Run(void) {
         Bluetooth_SendPassword(password_handler.current_buffer, false); // 빈 buffer 전송
         LCD16_ShowPassword(password_handler.current_buffer); // 빈 buffer 출력
         openSafe();
+        buzzer_timer_en_status = false;
+        Buzzer_Off();
+        Password_Clear_Wrong_Cnt(&password_handler);
       }
       else if (program_current_status == STATE_OPEN) {
         /* 절대 발생할 수 없는 경우 */
@@ -192,21 +225,14 @@ void Command_Run(void) {
 }
 
 /* buzzer Timer */
-void TIM3_IRQHandler(void) {
-  if(TIM_GetITStatus(TIM3, TIM_IT_Update)!=RESET) {
-    TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
+void TIM4_IRQHandler(void) {
+  if(TIM_GetITStatus(TIM4, TIM_IT_Update)!=RESET) {
+    TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
     
     if (buzzer_timer_en_status) {
-      ++buzzer_cnt;
-      buzzer_cnt %= 5;
-      if (buzzer_cnt == 0) {
-        if (buzzer_status) Buzzer_Off();
-        else ;//Buzzer_On();
-        buzzer_status = !buzzer_status;
-      }
-    }
-    else {
-      buzzer_cnt = 0;
+      if (buzzer_status) Buzzer_Off();
+      else Buzzer_On();
+      buzzer_status = !buzzer_status;
     }
    }
 }
@@ -220,22 +246,20 @@ int main(void) {
   Buzzer_Configure();
   Servo_Configure();
   
-  uint16_t prv_pos_x = Accelerator_Get_X();
-  uint16_t prv_pos_z = Accelerator_Get_Z();
+  LCD16_ShowMessage("STATE: INIT");
   
   while (1) {
     if (program_current_status == STATE_CLOSE) {
-      int cur_pos_x = Accelerator_Get_X();
-      int cur_pos_z = Accelerator_Get_Z();
-      int diff = (cur_pos_x - prv_pos_x) * (cur_pos_x - prv_pos_x) + (cur_pos_z - prv_pos_z) * (cur_pos_z - prv_pos_z);
-      if (diff >= 1000) {
+      int acceler = Accelerator_Get_X() + Accelerator_Get_Z();
+      if (acceler >= 610 || acceler <= 560 ) {
         if (buzzer_timer_en_status == false) {
-          Bluetooth_SendData(COMMAND_ALERT);
+          Bluetooth_SendData(COMMAND_ALERT_THEFT);
         }
         buzzer_timer_en_status = true;
       }
-      prv_pos_x = cur_pos_x;
-      prv_pos_z = cur_pos_z;
+    }
+    else {
+      buzzer_timer_en_status = false;
     }
   }
 }

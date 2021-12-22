@@ -13,11 +13,11 @@
 static void Buzzer_RCCInit(void);
 static void Buzzer_GPIOInit(void);
 static void Buzzer_TIMInit(void);
-static void Buzzer_NVIICInit(void);
+static void Buzzer_NVICInit(void);
 
 static void Buzzer_RCCInit() {
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 }
 static void Buzzer_GPIOInit() {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -27,10 +27,10 @@ static void Buzzer_GPIOInit() {
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(BUZZER_GPIO, &GPIO_InitStructure);
   
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 
 static void Buzzer_TIMInit(void) {
@@ -40,18 +40,18 @@ static void Buzzer_TIMInit(void) {
   TIM_TimeBaseStructure.TIM_Prescaler = prescale; 
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Down;
-  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+  TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
   
-  TIM_ARRPreloadConfig(TIM3, ENABLE);
-  TIM_Cmd(TIM3, ENABLE);
-  TIM_ITConfig(TIM3, TIM_IT_Update, ENABLE);
+  TIM_ARRPreloadConfig(TIM4, ENABLE);
+  TIM_Cmd(TIM4, ENABLE);
+  TIM_ITConfig(TIM4, TIM_IT_Update, ENABLE);
 }
 
-static void Buzzer_NVIICInit(void) {
+static void Buzzer_NVICInit(void) {
   NVIC_InitTypeDef NVIC_InitStructure;
   
   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -62,7 +62,7 @@ void Buzzer_Configure() {
   Buzzer_RCCInit();
   Buzzer_GPIOInit();
   Buzzer_TIMInit();
-  Buzzer_NVIICInit();
+  Buzzer_NVICInit();
 }
 
 void Buzzer_On() {

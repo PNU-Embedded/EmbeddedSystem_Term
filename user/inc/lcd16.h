@@ -6,9 +6,7 @@
 #endif 
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f10x_rcc.h"
-#include "stm32f10x_gpio.h"
-#include "string.h"
+#include "common.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

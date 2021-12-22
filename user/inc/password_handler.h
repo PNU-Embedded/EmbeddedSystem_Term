@@ -27,6 +27,8 @@ void Password_Type(Password_Handler*, char);
 bool Password_Enter(Password_Handler*);
 void Password_Delete(Password_Handler*);
 void Password_Reset(Password_Handler*);
+void Password_Increase_Wrong_Cnt(Password_Handler*);
+void Password_Clear_Wrong_Cnt(Password_Handler*);
 
 #ifdef __cplusplus
 }
